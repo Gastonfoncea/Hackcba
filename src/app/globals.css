@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Habilita el toggle por clase .dark en <html> */
+@custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------------------------------------------------------------
+   HACKCBA — Design tokens
+   Monocromático puro. Cero color. Jerarquía por inversión.
+   Los tokens son variables themeables: dark = invertir ink/paper.
+---------------------------------------------------------------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink); /* texto / bloques sólidos */
+  --color-paper: var(--paper); /* fondo */
+  --color-line: var(--line); /* bordes */
+  --color-muted: var(--muted); /* texto secundario / meta */
+
+  --font-display: var(--font-display), "Space Grotesk", sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* LIGHT (paper) */
+:root {
+  --ink: #0a0a0a;
+  --paper: #fafafa;
+  --line: #e5e5e5;
+  --muted: #737373;
+}
+
+/* DARK (default) — negro brutalist, sin glow ni gradientes */
+.dark {
+  --ink: #f5f5f5;
+  --paper: #0a0a0a;
+  --line: #2a2a2a;
+  --muted: #8a8a8a;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "ss01", "cv01";
+}
+
+/* ---------------------------------------------------------------
+   Animaciones
+---------------------------------------------------------------- */
+
+/* Marquee infinito */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+/* Cursor de terminal parpadeante */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: blink 1.05s steps(1) infinite;
+}
+
+/* Glitch sutil en el título (hover) — solo offset, sin color (es mono) */
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    clip-path: inset(10% 0 60% 0);
+  }
+  40% {
+    transform: translate(2px, -1px);
+    clip-path: inset(50% 0 20% 0);
+  }
+  60% {
+    transform: translate(-1px, 0);
+    clip-path: inset(20% 0 50% 0);
+  }
+  80% {
+    transform: translate(1px, 1px);
+    clip-path: inset(70% 0 10% 0);
+  }
+}
+.glitch {
+  position: relative;
+}
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+.glitch:hover::after {
+  opacity: 0.9;
+  animation: glitch 0.45s steps(2) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .cursor-blink {
+    animation: none;
+  }
+  .cursor-blink {
+    opacity: 1;
+  }
+  .glitch:hover::after {
+    animation: none;
+    opacity: 0;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }
