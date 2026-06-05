@@ -11,51 +11,27 @@ import IntroOverlay from "@/components/IntroOverlay";
 
 const EVENT = {
   name: "Hackcba",
-  dates: "12—14 SEP 2026",
-  venue: "FAMAF · UNC · CÓRDOBA",
+  dates: "17—19 JUL 2026",
+  venue: "NARANJA X · CÓRDOBA",
   registerUrl: "#registro",
 };
 
 const STATS = [
-  { value: "+200", label: "Hackers" },
-  { value: "$2M", label: "En premios" },
+  { value: "100", label: "Hackers" },
   { value: "48", label: "Horas" },
-  { value: "4", label: "Tracks" },
 ];
 
 const TRACKS = [
-  {
-    id: "01",
-    title: "AI & Agents",
-    desc: "LLMs, agentes autónomos, RAG, lo que se te ocurra que piense por vos.",
-  },
-  {
-    id: "02",
-    title: "DevTools",
-    desc: "Herramientas para que otros developers construyan más rápido. Meta.",
-  },
-  {
-    id: "03",
-    title: "Fintech",
-    desc: "Pagos, cripto, finanzas personales. Plata moviéndose en tiempo real.",
-  },
-  {
-    id: "04",
-    title: "Open",
-    desc: "Sin caja. Si rompe algo y lo arregla mejor, va. Sorprendenos.",
-  },
-];
-
-const PRIZES = [
-  { place: "1º", amount: "$1.000.000", extra: "+ mentorías + créditos cloud" },
-  { place: "2º", amount: "$600.000", extra: "+ créditos cloud" },
-  { place: "3º", amount: "$400.000", extra: "+ swag" },
+  { id: "01", title: "AI & Agents", desc: "LLMs, agentes autónomos, RAG." },
+  { id: "02", title: "DevTools", desc: "Herramientas para developers." },
+  { id: "03", title: "Fintech", desc: "Pagos, cripto, finanzas." },
+  { id: "04", title: "Open", desc: "Sin caja. Sorprendenos." },
 ];
 
 const SCHEDULE = [
   {
     day: "DÍA 01",
-    date: "Vie 12",
+    date: "Vie 17",
     items: [
       ["18:00", "Acreditación & welcome"],
       ["19:30", "Kickoff + armado de equipos"],
@@ -64,7 +40,7 @@ const SCHEDULE = [
   },
   {
     day: "DÍA 02",
-    date: "Sáb 13",
+    date: "Sáb 18",
     items: [
       ["10:00", "Workshops & mentorías"],
       ["14:00", "Check-in de proyectos"],
@@ -73,16 +49,14 @@ const SCHEDULE = [
   },
   {
     day: "DÍA 03",
-    date: "Dom 14",
+    date: "Dom 19",
     items: [
       ["18:00", "Freeze de código"],
       ["19:00", "Demos & pitchs"],
-      ["21:00", "Premiación & cierre"],
+      ["21:00", "Cierre & networking"],
     ],
   },
 ];
-
-const SPONSORS = ["TU LOGO", "SPONSOR", "PARTNER", "MEDIA", "VENUE", "SUMATE"];
 
 /* --------------------------- primitives --------------------------- */
 
@@ -141,9 +115,6 @@ export default function Home() {
           <a href="#tracks" className="transition-colors hover:text-ink">
             Tracks
           </a>
-          <a href="#premios" className="transition-colors hover:text-ink">
-            Premios
-          </a>
           <a href="#cronograma" className="transition-colors hover:text-ink">
             Cronograma
           </a>
@@ -180,9 +151,6 @@ export default function Home() {
 
         <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <p className="max-w-md font-mono text-base leading-relaxed text-muted">
-            <span className="text-ink">&gt;</span> 48 horas de código en el
-            corazón de Córdoba.
-            <br />
             <span className="text-ink">&gt;</span> Construí. Rompé. Enviá.
             <span className="cursor-blink ml-1 text-ink">_</span>
           </p>
@@ -199,39 +167,16 @@ export default function Home() {
         <Countdown />
       </section>
 
-      {/* MARQUEE */}
-      <div className="overflow-hidden border-b border-ink bg-ink py-3 text-paper">
-        <div className="animate-marquee flex w-max whitespace-nowrap font-mono text-sm uppercase tracking-wider">
-          {Array.from({ length: 2 }).map((_, dup) => (
-            <span key={dup} className="flex shrink-0">
-              {[
-                "Construí",
-                "Rompé",
-                "Enviá",
-                "48 horas",
-                "Sin dormir",
-                "Café infinito",
-                "Demo or die",
-              ].map((w) => (
-                <span key={w} className="mx-6 flex items-center gap-6">
-                  {w} <span className="text-paper/40">✦</span>
-                </span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* STATS */}
-      <section className="grid grid-cols-2 md:grid-cols-4">
+      <section className="grid grid-cols-2">
         {STATS.map((s, i) => (
           <div
             key={s.label}
-            className={`border-b border-ink px-6 py-10 md:py-14 ${
-              i % 2 === 0 ? "border-r" : ""
-            } md:border-r ${i === 3 ? "md:border-r-0" : ""}`}
+            className={`border-b border-ink px-6 py-10 md:px-10 md:py-12 ${
+              i === 0 ? "border-r border-ink" : ""
+            }`}
           >
-            <div className="font-display text-5xl font-bold tracking-tight md:text-6xl">
+            <div className="font-display text-4xl font-bold tracking-tight md:text-5xl">
               {s.value}
             </div>
             <div className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">
@@ -243,22 +188,15 @@ export default function Home() {
 
       {/* ABOUT */}
       <section className="border-b border-ink px-6 py-16 md:px-10 md:py-20">
-        <SectionLabel index="00 / SOBRE">¿Qué es esto?</SectionLabel>
+        <SectionLabel index="00">¿Qué es esto?</SectionLabel>
         <div className="grid gap-10 md:grid-cols-12">
-          <h2 className="text-3xl font-medium leading-tight tracking-tight md:col-span-7 md:text-5xl">
+          <h2 className="text-3xl font-medium leading-tight tracking-tight md:col-span-8 md:text-5xl">
             Un fin de semana para construir lo que venís postergando.
           </h2>
-          <div className="space-y-5 font-mono text-sm leading-relaxed text-muted md:col-span-5 md:pt-2">
-            <p>
-              Hackcba junta a +200 developers, diseñadores y founders en un
-              mismo lugar durante 48 horas. Cero teoría. Todo construcción.
-            </p>
-            <p>
-              Venís con una idea (o sin ella), armás equipo, y el domingo a la
-              noche tenés algo que funciona y que mostrás en vivo frente a un
-              jurado. Así de simple, así de intenso.
-            </p>
-          </div>
+          <p className="font-mono text-sm leading-relaxed text-muted md:col-span-4 md:pt-2">
+            Venís con una idea (o sin ella), armás equipo y el domingo mostrás
+            algo que funciona, en vivo, frente a un jurado.
+          </p>
         </div>
       </section>
 
@@ -267,7 +205,7 @@ export default function Home() {
         id="tracks"
         className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
       >
-        <SectionLabel index="01 / DESAFÍOS">Tracks</SectionLabel>
+        <SectionLabel index="01">Tracks</SectionLabel>
         <div className="grid border-t border-l border-ink sm:grid-cols-2">
           {TRACKS.map((t) => (
             <div
@@ -293,47 +231,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PRIZES */}
-      <section
-        id="premios"
-        className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
-      >
-        <SectionLabel index="02 / GUITA">Premios</SectionLabel>
-        <div className="border-t border-ink">
-          {PRIZES.map((p, i) => (
-            <div
-              key={p.place}
-              className={`group flex flex-col gap-2 border-b border-ink py-8 transition-colors duration-150 hover:bg-ink hover:text-paper md:flex-row md:items-center md:gap-8 ${
-                i === 0 ? "md:py-12" : ""
-              }`}
-            >
-              <span className="px-2 font-mono text-sm text-muted group-hover:text-paper/50 md:w-20">
-                {p.place}
-              </span>
-              <span
-                className={`px-2 font-bold tracking-tight ${
-                  i === 0 ? "text-5xl md:text-7xl" : "text-4xl md:text-5xl"
-                }`}
-              >
-                {p.amount}
-              </span>
-              <span className="px-2 font-mono text-sm text-muted group-hover:text-paper/70 md:ml-auto md:text-right">
-                {p.extra}
-              </span>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 font-mono text-xs uppercase tracking-wider text-muted">
-          * Montos en pesos. Premios especiales por track a confirmar.
-        </p>
-      </section>
-
       {/* SCHEDULE */}
       <section
         id="cronograma"
         className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
       >
-        <SectionLabel index="03 / 48HS">Cronograma</SectionLabel>
+        <SectionLabel index="02">Cronograma</SectionLabel>
         <div className="grid gap-px border border-ink bg-ink md:grid-cols-3">
           {SCHEDULE.map((d) => (
             <div key={d.day} className="bg-paper p-8 md:p-10">
@@ -362,20 +265,13 @@ export default function Home() {
 
       {/* SPONSORS */}
       <section className="border-b border-ink px-6 py-16 md:px-10 md:py-20">
-        <SectionLabel index="04 / APOYAN">Sponsors</SectionLabel>
-        <div className="grid grid-cols-2 border-t border-l border-ink sm:grid-cols-3">
-          {SPONSORS.map((s) => (
-            <div
-              key={s}
-              className="flex h-28 items-center justify-center border-b border-r border-ink font-mono text-sm uppercase tracking-widest text-muted transition-colors hover:bg-ink hover:text-paper md:h-36"
-            >
-              {s}
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 font-mono text-xs uppercase tracking-wider text-muted">
-          ¿Querés que tu logo esté acá?{" "}
-          <a href="#registro" className="text-ink underline underline-offset-4">
+        <SectionLabel index="03">Sponsors</SectionLabel>
+        <p className="max-w-xl font-mono text-sm leading-relaxed text-muted">
+          Todavía sin confirmar. ¿Querés que tu marca esté acá?{" "}
+          <a
+            href="#registro"
+            className="text-ink underline underline-offset-4 hover:text-muted"
+          >
             Escribinos →
           </a>
         </p>
@@ -383,7 +279,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section id="faq" className="px-6 py-16 md:px-10 md:py-20">
-        <SectionLabel index="05 / DUDAS">Preguntas frecuentes</SectionLabel>
+        <SectionLabel index="04">Preguntas frecuentes</SectionLabel>
         <Faq />
       </section>
 

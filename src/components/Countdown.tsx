@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-// Fecha objetivo del evento (placeholder). Arranca Vie 12 SEP 2026, 18:00 ART.
-const TARGET = new Date("2026-09-12T18:00:00-03:00").getTime();
+// Fecha objetivo del evento (placeholder). Arranca Vie 17 JUL 2026, 18:00 ART.
+const TARGET = new Date("2026-07-17T18:00:00-03:00").getTime();
 
 type T = { d: number; h: number; m: number; s: number };
 
