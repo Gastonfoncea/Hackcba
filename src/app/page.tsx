@@ -1,6 +1,8 @@
 import Faq from "@/components/Faq";
 import Countdown from "@/components/Countdown";
 import ThemeToggle from "@/components/ThemeToggle";
+import Logo from "@/components/Logo";
+import IntroOverlay from "@/components/IntroOverlay";
 
 /* ===============================================================
    HACKCBA — Landing (iteración 1)
@@ -8,7 +10,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 ================================================================ */
 
 const EVENT = {
-  name: "HACKCBA",
+  name: "Hackcba",
   dates: "12—14 SEP 2026",
   venue: "FAMAF · UNC · CÓRDOBA",
   registerUrl: "#registro",
@@ -127,12 +129,13 @@ function Cta({
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-[1240px] border-x-2 border-ink">
+    <>
+      <IntroOverlay />
+      <main className="mx-auto w-full max-w-[1240px] border-x-2 border-ink">
       {/* NAV */}
       <header className="flex items-center justify-between border-b-2 border-ink px-6 py-5 md:px-10">
-        <a href="#" className="font-mono text-sm font-bold tracking-tight">
-          {EVENT.name}
-          <span className="text-muted">.dev</span>
+        <a href="#" aria-label="Hackcba — inicio">
+          <Logo />
         </a>
         <nav className="hidden items-center gap-8 font-mono text-xs uppercase tracking-wider text-muted md:flex">
           <a href="#tracks" className="transition-colors hover:text-ink">
@@ -160,7 +163,7 @@ export default function Home() {
       </header>
 
       {/* HERO */}
-      <section className="border-b-2 border-ink px-6 pb-12 pt-16 md:px-10 md:pb-16 md:pt-24">
+      <section className="border-b-2 border-ink px-6 pb-12 pt-16 md:px-10 md:pb-20 md:pt-24">
         <p className="mb-8 font-mono text-xs uppercase tracking-[0.25em] text-muted">
           {EVENT.dates} <span className="mx-2">//</span> {EVENT.venue}
         </p>
@@ -173,7 +176,6 @@ export default function Home() {
           <span className="glitch inline-block" data-text="CÓRDOBA">
             CÓRDOBA
           </span>
-          <span className="cursor-blink ml-2 text-muted">_</span>
         </h1>
 
         <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -182,6 +184,7 @@ export default function Home() {
             corazón de Córdoba.
             <br />
             <span className="text-ink">&gt;</span> Construí. Rompé. Enviá.
+            <span className="cursor-blink ml-1 text-ink">_</span>
           </p>
           <Cta href={EVENT.registerUrl}>Inscribite</Cta>
         </div>
@@ -239,7 +242,7 @@ export default function Home() {
       </section>
 
       {/* ABOUT */}
-      <section className="border-b border-ink px-6 py-16 md:px-10 md:py-24">
+      <section className="border-b border-ink px-6 py-16 md:px-10 md:py-20">
         <SectionLabel index="00 / SOBRE">¿Qué es esto?</SectionLabel>
         <div className="grid gap-10 md:grid-cols-12">
           <h2 className="text-3xl font-medium leading-tight tracking-tight md:col-span-7 md:text-5xl">
@@ -247,7 +250,7 @@ export default function Home() {
           </h2>
           <div className="space-y-5 font-mono text-sm leading-relaxed text-muted md:col-span-5 md:pt-2">
             <p>
-              HACKCBA junta a +200 developers, diseñadores y founders en un
+              Hackcba junta a +200 developers, diseñadores y founders en un
               mismo lugar durante 48 horas. Cero teoría. Todo construcción.
             </p>
             <p>
@@ -262,7 +265,7 @@ export default function Home() {
       {/* TRACKS */}
       <section
         id="tracks"
-        className="border-b border-ink px-6 py-16 md:px-10 md:py-24"
+        className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
       >
         <SectionLabel index="01 / DESAFÍOS">Tracks</SectionLabel>
         <div className="grid border-t border-l border-ink sm:grid-cols-2">
@@ -293,7 +296,7 @@ export default function Home() {
       {/* PRIZES */}
       <section
         id="premios"
-        className="border-b border-ink px-6 py-16 md:px-10 md:py-24"
+        className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
       >
         <SectionLabel index="02 / GUITA">Premios</SectionLabel>
         <div className="border-t border-ink">
@@ -328,7 +331,7 @@ export default function Home() {
       {/* SCHEDULE */}
       <section
         id="cronograma"
-        className="border-b border-ink px-6 py-16 md:px-10 md:py-24"
+        className="border-b border-ink px-6 py-16 md:px-10 md:py-20"
       >
         <SectionLabel index="03 / 48HS">Cronograma</SectionLabel>
         <div className="grid gap-px border border-ink bg-ink md:grid-cols-3">
@@ -358,7 +361,7 @@ export default function Home() {
       </section>
 
       {/* SPONSORS */}
-      <section className="border-b border-ink px-6 py-16 md:px-10 md:py-24">
+      <section className="border-b border-ink px-6 py-16 md:px-10 md:py-20">
         <SectionLabel index="04 / APOYAN">Sponsors</SectionLabel>
         <div className="grid grid-cols-2 border-t border-l border-ink sm:grid-cols-3">
           {SPONSORS.map((s) => (
@@ -379,7 +382,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="px-6 py-16 md:px-10 md:py-24">
+      <section id="faq" className="px-6 py-16 md:px-10 md:py-20">
         <SectionLabel index="05 / DUDAS">Preguntas frecuentes</SectionLabel>
         <Faq />
       </section>
@@ -413,7 +416,7 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="flex flex-col gap-6 border-t border-ink px-6 py-8 font-mono text-xs uppercase tracking-wider text-muted md:flex-row md:items-center md:justify-between md:px-10">
-        <span>© 2026 HACKCBA — Córdoba, Argentina</span>
+        <span>© 2026 Hackcba — Córdoba, Argentina</span>
         <div className="flex gap-6">
           <a href="#" className="transition-colors hover:text-ink">
             Instagram
@@ -426,6 +429,7 @@ export default function Home() {
           </a>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }

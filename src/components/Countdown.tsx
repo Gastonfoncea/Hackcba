@@ -24,13 +24,21 @@ const pad = (n: number, len = 2) => String(n).padStart(len, "0");
 function Unit({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col">
-      <span className="font-display text-5xl font-bold leading-none tracking-tight tabular-nums sm:text-6xl md:text-7xl">
+      <span className="font-display text-4xl font-bold leading-none tracking-tight tabular-nums sm:text-6xl md:text-7xl">
         {value}
       </span>
-      <span className="mt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-muted">
+      <span className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted sm:tracking-[0.25em]">
         {label}
       </span>
     </div>
+  );
+}
+
+function Sep() {
+  return (
+    <span className="pb-7 font-display text-2xl font-bold text-muted sm:pb-9 sm:text-4xl md:text-5xl">
+      :
+    </span>
   );
 }
 
@@ -48,22 +56,16 @@ export default function Countdown() {
 
   return (
     <div
-      className="flex items-end gap-5 sm:gap-8"
+      className="flex items-end gap-2.5 sm:gap-6 md:gap-8"
       role="timer"
       aria-label="Cuenta regresiva para el inicio"
     >
       <Unit value={pad(v.d, 3)} label="Días" />
-      <span className="pb-9 font-display text-4xl font-bold text-muted md:text-5xl">
-        :
-      </span>
+      <Sep />
       <Unit value={pad(v.h)} label="Horas" />
-      <span className="pb-9 font-display text-4xl font-bold text-muted md:text-5xl">
-        :
-      </span>
+      <Sep />
       <Unit value={pad(v.m)} label="Min" />
-      <span className="pb-9 font-display text-4xl font-bold text-muted md:text-5xl">
-        :
-      </span>
+      <Sep />
       <Unit value={pad(v.s)} label="Seg" />
     </div>
   );

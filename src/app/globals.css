@@ -59,6 +59,21 @@ body {
   animation: marquee 28s linear infinite;
 }
 
+/* Boot del logo en la intro */
+@keyframes introPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.intro-pop {
+  animation: introPop 0.45s ease-out forwards;
+}
+
 /* Cursor de terminal parpadeante */
 @keyframes blink {
   0%,

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 2340" fill="none" role="img" aria-label="HACKCBA — wallpaper">
+  <!-- Fondo -->
+  <rect width="1080" height="2340" fill="#0a0a0a"/>
+
+  <!-- Frame brutalist -->
+  <rect x="48" y="48" width="984" height="2244" stroke="#262626" stroke-width="2"/>
+
+  <!-- Ticks / labels en esquinas -->
+  <text x="80" y="132" font-family="'JetBrains Mono', monospace" font-size="26" letter-spacing="4" fill="#8a8a8a">// HACKCBA.DEV</text>
+  <text x="1000" y="132" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="26" letter-spacing="4" fill="#8a8a8a">EST. 2026</text>
+
+  <text x="80" y="2240" font-family="'JetBrains Mono', monospace" font-size="26" letter-spacing="4" fill="#8a8a8a">CÓRDOBA · AR</text>
+  <text x="1000" y="2240" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="26" letter-spacing="4" fill="#8a8a8a">48 : 00 : 00</text>
+
+  <!-- Lockup central: slash + Hackcba (escalado y centrado) -->
+  <g transform="translate(160 980) scale(1.52)" fill="#fafafa">
+    <path d="M24 102 L51 102 L86 18 L59 18 Z"/>
+    <text x="124" y="93" font-family="'Space Grotesk', system-ui, sans-serif" font-size="92" font-weight="600" letter-spacing="-3">Hackcba</text>
+  </g>
+
+  <!-- Divisor + sub-label -->
+  <line x1="390" y1="1230" x2="690" y2="1230" stroke="#fafafa" stroke-width="2"/>
+  <text x="540" y="1300" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="30" letter-spacing="8" fill="#8a8a8a">HACKATHON · 48HS</text>
+
+  <!-- Bloque inferior: fecha + tagline -->
+  <text x="540" y="1980" text-anchor="middle" font-family="'Space Grotesk', system-ui, sans-serif" font-size="64" font-weight="700" letter-spacing="-1" fill="#fafafa">12 — 14 SEP</text>
+  <text x="540" y="2046" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="28" letter-spacing="6" fill="#8a8a8a">FAMAF · UNC · 2026</text>
+
+  <text x="540" y="2150" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="30" letter-spacing="2" fill="#fafafa">&gt; construí. rompé. enviá.<tspan fill="#8a8a8a" dx="6">_</tspan></text>
+</svg>

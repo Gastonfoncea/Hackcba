@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" fill="none" role="img" aria-label="Hackcba">
+  <!-- Mark: slash paralelogramo -->
+  <path d="M24 102 L51 102 L86 18 L59 18 Z" fill="currentColor"/>
+  <!-- Wordmark -->
+  <text x="124" y="93" font-family="'Space Grotesk', system-ui, -apple-system, sans-serif" font-size="92" font-weight="600" letter-spacing="-3" fill="currentColor">Hackcba</text>
+</svg>
