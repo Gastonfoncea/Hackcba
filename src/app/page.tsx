@@ -27,7 +27,7 @@ const SPONSORS: Sponsor[] = [
   { name: "Naranja X", role: "Anfitrión", logo: "/sponsors/naranja-x.webp" },
   { name: "BTC Argentina", logo: "/sponsors/btc-argentina.png" },
   { name: "Hedera", logo: "/sponsors/hedera.svg" },
-  { name: "Wallbit" },
+  { name: "Wallbit", logo: "/sponsors/Wallbit-logo.png" },
   { name: "Paisanos", logo: "/sponsors/paisanos.png" },
 ];
 
