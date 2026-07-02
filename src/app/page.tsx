@@ -18,16 +18,17 @@ const EVENT = {
   registerUrl: "#registro",
 };
 
-/* Sponsors. Logos pendientes (SVG blanco) -> slots con nombre por ahora. */
-const SPONSORS = [
-  { name: "Córdoba Cluster" },
-  { name: "Cursor" },
-  { name: "Supabase" },
-  { name: "Naranja X", role: "Anfitrión" },
-  { name: "BTC Argentina" },
-  { name: "Hedera" },
+/* Sponsors. Logos en blanco (public/sponsors). Wallbit: logo pendiente -> nombre. */
+type Sponsor = { name: string; role?: string; logo?: string };
+const SPONSORS: Sponsor[] = [
+  { name: "Córdoba Cluster", logo: "/sponsors/cordoba-cluster.png" },
+  { name: "Cursor", logo: "/sponsors/cursor.svg" },
+  { name: "Supabase", logo: "/sponsors/supabase.svg" },
+  { name: "Naranja X", role: "Anfitrión", logo: "/sponsors/naranja-x.webp" },
+  { name: "BTC Argentina", logo: "/sponsors/btc-argentina.png" },
+  { name: "Hedera", logo: "/sponsors/hedera.svg" },
   { name: "Wallbit" },
-  { name: "Monster" },
+  { name: "Paisanos", logo: "/sponsors/paisanos.png" },
 ];
 
 /* Cronograma (horarios tentativos). Fases del deck, agrupadas por día. */
@@ -229,16 +230,35 @@ function Track({
   );
 }
 
-/* Slot de sponsor: caja sharp normalizada. Reemplazar el nombre por el SVG. */
-function SponsorSlot({ name, role }: { name: string; role?: string }) {
+/* Slot de sponsor: caja sharp normalizada. Logo en blanco (object-contain),
+   con fallback al nombre si todavía no hay logo. Se aclara en hover. */
+function SponsorSlot({
+  name,
+  role,
+  logo,
+}: {
+  name: string;
+  role?: string;
+  logo?: string;
+}) {
   return (
-    <div className="relative flex aspect-[5/2] flex-col items-center justify-center border border-white/10 bg-white/[0.02] p-4">
+    <div className="group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
       <Corners />
-      <span className="font-display text-lg font-bold tracking-tight text-paper/75 sm:text-2xl">
-        {name}
-      </span>
+      {logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logo}
+          alt={name}
+          loading="lazy"
+          className="max-h-8 w-auto max-w-[78%] object-contain opacity-70 transition-opacity duration-200 group-hover:opacity-100 sm:max-h-10"
+        />
+      ) : (
+        <span className="font-display text-lg font-bold tracking-tight text-paper/75 sm:text-2xl">
+          {name}
+        </span>
+      )}
       {role ? (
-        <span className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
           {role}
         </span>
       ) : null}
@@ -534,7 +554,7 @@ export default function HeroV2() {
 
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {SPONSORS.map((s) => (
-              <SponsorSlot key={s.name} name={s.name} role={s.role} />
+              <SponsorSlot key={s.name} name={s.name} role={s.role} logo={s.logo} />
             ))}
           </div>
 
