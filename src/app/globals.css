@@ -128,10 +128,128 @@ body {
   animation: glitch 0.45s steps(2) 1;
 }
 
+/* ---------------------------------------------------------------
+   v2 — Glassmorphism mono ("neón" = bloom blanco, sin color aún)
+   Cambiá --accent a un color para revivir el neón sin tocar nada más.
+---------------------------------------------------------------- */
+.v2 {
+  /* B&W por ahora — sin color. Cuando sumes accent, cambiá solo --accent. */
+  --accent: 245 245 245; /* detalles / CTA = blanco */
+  --paper: #f4efe6; /* texto claro = blanco hueso */
+  --muted: #8a8a8a; /* gris secundario */
+}
+
+/* Glow de fondo que "respira" */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.9;
+  }
+}
+.animate-breathe {
+  animation: breathe 11s ease-in-out infinite;
+}
+
+/* Deriva lenta del segundo glow (desfasado) */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.05);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(4%, -3%) scale(1.25);
+    opacity: 0.75;
+  }
+}
+.animate-drift {
+  animation: drift 17s ease-in-out infinite;
+}
+
+/* Scan-line: barrido vertical lento tipo instrumento */
+@keyframes scan {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  8%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+.animate-scan {
+  animation: scan 7.5s linear infinite;
+}
+
+/* Lock-in: el título "se asienta" con un glitch corto de una pasada.
+   No re-tipea (el tipeo vive en el intro): solo aterriza. */
+@keyframes lockIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    clip-path: inset(0 0 100% 0);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(-4px);
+    clip-path: inset(15% 0 55% 0);
+  }
+  45% {
+    transform: translateX(4px);
+    clip-path: inset(60% 0 12% 0);
+  }
+  65% {
+    transform: translateX(-2px);
+    clip-path: inset(30% 0 40% 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+.lock-in {
+  opacity: 0;
+  animation: lockIn 0.52s steps(3, end) forwards;
+}
+
+/* Entrada escalonada (fade + rise) */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise-in {
+  opacity: 0;
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
-  .cursor-blink {
+  .cursor-blink,
+  .animate-breathe,
+  .animate-drift {
     animation: none;
+  }
+  .rise-in,
+  .lock-in {
+    opacity: 1;
+    animation: none;
+    clip-path: none;
   }
   .cursor-blink {
     opacity: 1;
