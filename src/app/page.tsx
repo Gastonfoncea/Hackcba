@@ -147,7 +147,7 @@ function Sep() {
 
 /* Tick de esquina tipo HUD (geometría sharp), reutilizado en toda la página */
 function Corners() {
-  const base = "pointer-events-none absolute h-2.5 w-2.5 border-white/40";
+  const base = "pointer-events-none absolute h-2.5 w-2.5 border-white/20";
   return (
     <>
       <span aria-hidden className={`${base} left-0 top-0 border-l border-t`} />
