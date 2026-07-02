@@ -250,7 +250,7 @@ function SponsorSlot({
           src={logo}
           alt={name}
           loading="lazy"
-          className="max-h-8 w-auto max-w-[78%] object-contain opacity-70 transition-opacity duration-200 group-hover:opacity-100 sm:max-h-10"
+          className="max-h-10 w-auto max-w-[82%] object-contain opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:max-h-12"
         />
       ) : (
         <span className="font-display text-lg font-bold tracking-tight text-paper/75 sm:text-2xl">
