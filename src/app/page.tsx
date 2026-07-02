@@ -5,9 +5,15 @@
    Flujo: Intro tipea "hackcba" → el hero BOOTEA (lock-in + cascada +
    power-on del countdown). Debajo: secciones en el mismo lenguaje.
    Accent (B&W por ahora) en --accent (.v2 en globals.css).
+
+   VOZ DEL COPY — "entusiasta concreto":
+   voseo · castellano · promesas como escenas verificables (nada de
+   adjetivos huecos) · spanglish solo en términos de cultura (Demo
+   Day, freeze, pitch) · inglés permitido como flavor decorativo,
+   nunca en frases completas del copy principal.
 ================================================================ */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import TerminalBackground from "./TerminalBackground";
 import Intro from "./Intro";
 
@@ -40,17 +46,17 @@ const SCHEDULE = [
       {
         time: "10:00",
         title: "Apertura",
-        desc: "Presentación de desafíos y armado de equipos.",
+        desc: "Se presentan los desafíos de cada track y armás tu equipo ahí mismo.",
       },
       {
         time: "12:00",
         title: "Workshops & charlas",
-        desc: "Talleres prácticos sobre herramientas y tendencias del ecosistema.",
+        desc: "Talleres cortos de las herramientas que vas a usar esa misma noche.",
       },
       {
         time: "14:00",
         title: "Arranca el building",
-        desc: "24 horas para pasar de la idea a la demo. Mentores en cada etapa.",
+        desc: "Empieza a correr el reloj: de acá al freeze hay 24 horas para llegar a la demo.",
       },
       {
         time: "00:00",
@@ -66,12 +72,12 @@ const SCHEDULE = [
       {
         time: "14:00",
         title: "Freeze & Demo Day",
-        desc: "Congelás el código. Pitcheás a un jurado de referentes.",
+        desc: "Código congelado: cada equipo pitchea su demo frente al jurado.",
       },
       {
         time: "16:00",
         title: "Cierre",
-        desc: "Resultados, feedback y networking.",
+        desc: "Ganadores, feedback del jurado y la última ronda de networking.",
       },
     ],
   },
@@ -145,31 +151,101 @@ function Sep() {
   );
 }
 
-/* Tick de esquina tipo HUD (geometría sharp), reutilizado en toda la página */
-function Corners() {
-  const base = "pointer-events-none absolute h-2.5 w-2.5 border-white/20";
-  return (
-    <>
-      <span aria-hidden className={`${base} left-0 top-0 border-l border-t`} />
-      <span aria-hidden className={`${base} right-0 top-0 border-r border-t`} />
-      <span aria-hidden className={`${base} left-0 bottom-0 border-l border-b`} />
-      <span aria-hidden className={`${base} right-0 bottom-0 border-r border-b`} />
-    </>
-  );
+/* ---------------- boot-on-scroll: la sección "imprime" al entrar --------- */
+
+/* Dispara una sola vez cuando el elemento entra al viewport */
+function useInView<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, inView };
 }
 
-/* Encabezado de sección, estilo terminal: // 01 · LABEL ───────── */
-function SectionLabel({ index, label }: { index: string; label: string }) {
+/* Bloque que entra con rise-in la primera vez que aparece en viewport */
+function Reveal({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const { ref, inView } = useInView<HTMLDivElement>();
   return (
-    <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted">
-      <span className="text-paper">// {index}</span>
-      <span>{label}</span>
-      <span className="h-px flex-1 bg-white/10" />
+    <div
+      ref={ref}
+      className={`${className} ${inView ? "rise-in" : "opacity-0"}`}
+      style={delay ? { animationDelay: `${delay}s` } : undefined}
+    >
+      {children}
     </div>
   );
 }
 
-/* Celda de stat sharp con corner ticks */
+/* Encabezado de sección, estilo terminal: // 01 · LABEL ─────────
+   Al entrar en viewport, el label se tipea y la línea se dibuja en pasos. */
+function SectionLabel({ index, label }: { index: string; label: string }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const [chars, setChars] = useState(0);
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    if (!inView) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduce) {
+      setChars(label.length);
+      return;
+    }
+    setTyping(true);
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setChars(i);
+      if (i >= label.length) {
+        clearInterval(id);
+        setTimeout(() => setTyping(false), 420);
+      }
+    }, 42);
+    return () => clearInterval(id);
+  }, [inView, label]);
+
+  return (
+    <div
+      ref={ref}
+      className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted"
+    >
+      <span className={`text-paper ${inView ? "" : "opacity-0"}`}>
+        // {index}
+      </span>
+      <span className="whitespace-pre">
+        {label.slice(0, chars)}
+        {typing ? (
+          <span className="cursor-blink ml-0.5 inline-block h-[1.3em] w-[0.5em] translate-y-[0.3em] bg-muted" />
+        ) : null}
+      </span>
+      <span className={`line-draw h-px flex-1 bg-white/10 ${inView ? "on" : ""}`} />
+    </div>
+  );
+}
+
+/* Celda de stat: al entrar en viewport, el número sube a saltos (stepped) */
 function Stat({
   value,
   unit,
@@ -179,11 +255,38 @@ function Stat({
   unit?: string;
   label: string;
 }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const [display, setDisplay] = useState("0".padStart(value.length, "0"));
+
+  useEffect(() => {
+    if (!inView) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const target = parseInt(value, 10);
+    if (reduce || Number.isNaN(target)) {
+      setDisplay(value);
+      return;
+    }
+    const steps = 12;
+    let k = 0;
+    const id = setInterval(() => {
+      k += 1;
+      setDisplay(
+        String(Math.round((target * k) / steps)).padStart(value.length, "0"),
+      );
+      if (k >= steps) clearInterval(id);
+    }, 45);
+    return () => clearInterval(id);
+  }, [inView, value]);
+
   return (
-    <div className="relative border border-white/10 bg-white/[0.02] px-3 py-6 text-center sm:py-8">
-      <Corners />
+    <div
+      ref={ref}
+      className="relative border border-white/10 bg-white/[0.02] px-3 py-6 text-center sm:py-8"
+    >
       <div className="font-display text-3xl font-bold tabular-nums text-paper sm:text-5xl">
-        {value}
+        {display}
         {unit ? <span className="ml-0.5 text-lg text-muted sm:text-2xl">{unit}</span> : null}
       </div>
       <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
@@ -207,7 +310,6 @@ function Track({
 }) {
   return (
     <div className="group relative flex flex-col border border-white/10 bg-white/[0.02] p-6 transition-colors hover:bg-white/[0.04] sm:p-7">
-      <Corners />
       <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
         {id}
       </span>
@@ -243,7 +345,6 @@ function SponsorSlot({
 }) {
   return (
     <div className="group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
-      <Corners />
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -305,7 +406,6 @@ function Countdown({ booted }: { booted: boolean }) {
       }`}
       style={{ boxShadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.07)" }}
     >
-      <Corners />
       <Unit value={v.d} label="Días" />
       <Sep />
       <Unit value={v.h} label="Hrs" />
@@ -342,7 +442,6 @@ export default function HeroV2() {
           <span className="text-paper">
             Hackcba<span className="text-muted">/26</span>
           </span>
-          <span>Inscripción abierta</span>
         </header>
 
         {/* Contenido del hero */}
@@ -366,14 +465,14 @@ export default function HeroV2() {
             HACKCBA
           </h1>
 
-          {/* terminal subtitle — voz de la marca */}
+          {/* terminal subtitle — qué es, en una línea */}
           <p
             className={`mt-5 font-mono text-sm text-muted sm:text-base ${
               booted ? "rise-in [animation-delay:0.2s]" : "opacity-0"
             }`}
           >
-            <span style={{ color: "rgb(var(--accent))" }}>&gt;</span> Construí.
-            Rompé. Enviá.
+            <span style={{ color: "rgb(var(--accent))" }}>&gt;</span> 24 hs ·
+            100 hackers · Casa Naranja X, Córdoba
             <span className="cursor-blink ml-1 inline-block h-[1em] w-[0.5em] translate-y-[0.1em] bg-[rgb(var(--accent))] align-middle" />
           </p>
 
@@ -403,26 +502,26 @@ export default function HeroV2() {
 
           <div className="mt-10 grid gap-12 lg:grid-cols-[1.45fr_1fr] lg:items-center lg:gap-16">
             {/* pitch */}
-            <div>
+            <Reveal>
               <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
                 Tenés 24 horas.
                 <br />
                 Hacé que funcione.
               </h2>
               <p className="mt-6 max-w-xl font-mono text-sm leading-relaxed text-muted sm:text-[15px]">
-                Hackcba junta a 100 hackers en Córdoba durante 24 horas para
-                pasar de una idea a una demo que corre. Sin clases, sin teoría,
-                sin diapositivas. Armás equipo, elegís un track y enviás. Lo que
-                buildees es tuyo.
+                Venís con una idea, te vas con un producto. 24 horas
+                construyendo con 100 hackers, mentores en cada etapa, y el
+                domingo tu demo corriendo frente al jurado. Lo que hagas es
+                tuyo.
               </p>
-            </div>
+            </Reveal>
 
             {/* stats */}
-            <div className="grid grid-cols-3 gap-3">
+            <Reveal delay={0.12} className="grid grid-cols-3 gap-3">
               <Stat value="24" unit="hs" label="Sin parar" />
               <Stat value="100" label="Hackers" />
-              <Stat value="01" label="Demo final" />
-            </div>
+              <Stat value="03" label="Tracks" />
+            </Reveal>
           </div>
         </div>
       </section>
@@ -435,17 +534,17 @@ export default function HeroV2() {
         <div className="mx-auto w-full max-w-5xl">
           <SectionLabel index="02" label="Tracks" />
 
-          <div className="mt-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <Reveal className="mt-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
               Elegí tu track.
             </h2>
             <p className="max-w-sm font-mono text-sm leading-relaxed text-muted">
-              Tres ejes para construir algo que importa. Elegís uno, armás
-              equipo y vas.
+              Tres verticales con desafíos concretos que se presentan en la
+              apertura. Elegí la tuya y construí sobre eso todo el finde.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-3 md:grid-cols-3">
+          <Reveal delay={0.12} className="mt-12 grid grid-cols-1 gap-3 md:grid-cols-3">
             {TRACKS.map((t) => (
               <Track
                 key={t.id}
@@ -455,7 +554,7 @@ export default function HeroV2() {
                 tags={t.tags}
               />
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -467,18 +566,20 @@ export default function HeroV2() {
         <div className="mx-auto w-full max-w-3xl">
           <SectionLabel index="03" label="Cronograma" />
 
-          <div className="mt-10 flex items-end justify-between gap-6">
+          <Reveal className="mt-10 flex items-end justify-between gap-6">
             <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
               24 horas, sin pausa.
             </h2>
             <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
               Horarios tentativos
             </span>
-          </div>
+          </Reveal>
 
           {/* barra cuándo & dónde */}
-          <div className="relative mt-10 flex flex-col gap-4 border border-white/10 bg-white/[0.02] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-            <Corners />
+          <Reveal
+            delay={0.1}
+            className="relative mt-10 flex flex-col gap-4 border border-white/10 bg-white/[0.02] px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
+          >
             <div className="flex flex-col gap-1">
               <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
                 Fecha
@@ -503,9 +604,10 @@ export default function HeroV2() {
             >
               Ver en mapa →
             </a>
-          </div>
+          </Reveal>
 
           {/* timeline agrupado por día */}
+          <Reveal delay={0.16}>
           {SCHEDULE.map((d) => (
             <div key={d.day} className="mt-12">
               <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em]">
@@ -537,6 +639,7 @@ export default function HeroV2() {
               </ol>
             </div>
           ))}
+          </Reveal>
         </div>
       </section>
 
@@ -548,26 +651,30 @@ export default function HeroV2() {
         <div className="mx-auto w-full max-w-5xl">
           <SectionLabel index="04" label="Sponsors" />
 
-          <p className="mt-10 font-mono text-sm leading-relaxed text-muted">
-            Con el apoyo de quienes empujan el ecosistema de Córdoba.
-          </p>
+          <Reveal className="mt-10">
+            <p className="font-mono text-sm leading-relaxed text-muted">
+              Hackcba pasa gracias a estas empresas.
+            </p>
+          </Reveal>
 
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Reveal delay={0.1} className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {SPONSORS.map((s) => (
               <SponsorSlot key={s.name} name={s.name} role={s.role} logo={s.logo} />
             ))}
-          </div>
+          </Reveal>
 
           {/* captar más sponsors */}
-          <a
-            href="#registro"
-            className="group mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-muted transition-colors hover:text-paper"
-          >
-            ¿Querés que tu empresa esté acá?
-            <span className="text-paper/70 transition-transform group-hover:translate-x-1">
-              Sumate →
-            </span>
-          </a>
+          <Reveal delay={0.18}>
+            <a
+              href="#registro"
+              className="group mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-muted transition-colors hover:text-paper"
+            >
+              ¿Querés que tu empresa esté acá?
+              <span className="text-paper/70 transition-transform group-hover:translate-x-1">
+                Sumate →
+              </span>
+            </a>
+          </Reveal>
         </div>
       </section>
 
@@ -576,14 +683,14 @@ export default function HeroV2() {
         id="registro"
         className="relative border-t border-white/10 px-5 py-24 text-center sm:px-8 sm:py-32"
       >
-        <div className="mx-auto flex max-w-2xl flex-col items-center">
+        <Reveal className="mx-auto flex max-w-2xl flex-col items-center">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">
             {EVENT.dates} · Casa Naranja X
           </span>
           <h2 className="mt-6 font-display text-4xl font-bold leading-[0.95] tracking-[-0.03em] text-paper sm:text-6xl">
             Nos vemos
             <br />
-            en julio.
+            el 18.
           </h2>
           <p className="mt-6 font-mono text-sm leading-relaxed text-muted">
             100 lugares. 24 horas. Una demo.
@@ -598,7 +705,7 @@ export default function HeroV2() {
           <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
             Inscripción abierta · cupos limitados
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* ===================== FOOTER ===================== */}

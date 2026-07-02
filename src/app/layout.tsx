@@ -15,12 +15,13 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hackcba — Hackathon Córdoba",
+  title: "Hackcba — La hackathon de Córdoba",
   description:
-    "48 horas de código en el corazón de Córdoba. Construí. Rompé. Enviá.",
+    "24 horas, 100 hackers, una demo. Venís con una idea, te vas con un producto. 18 y 19 de julio en Casa Naranja X, Córdoba.",
   openGraph: {
-    title: "Hackcba — Hackathon Córdoba",
-    description: "48 horas de código en el corazón de Córdoba.",
+    title: "Hackcba — La hackathon de Córdoba",
+    description:
+      "24 horas, 100 hackers, una demo. 18 y 19 de julio en Casa Naranja X, Córdoba.",
     locale: "es_AR",
     type: "website",
   },

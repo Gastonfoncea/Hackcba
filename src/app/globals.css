@@ -139,6 +139,13 @@ body {
   --muted: #8a8a8a; /* gris secundario */
 }
 
+/* Selección de texto sobre el fondo oscuro: bloque claro + texto negro.
+   (El selection:bg-ink del body resuelve blanco-sobre-blanco dentro de .v2.) */
+main.v2 ::selection {
+  background: #f4efe6;
+  color: #050505;
+}
+
 /* Glow de fondo que "respira" */
 @keyframes breathe {
   0%,
@@ -222,6 +229,24 @@ body {
   animation: lockIn 0.52s steps(3, end) forwards;
 }
 
+/* Línea divisoria de los labels de sección: se dibuja en pasos, como
+   un instrumento imprimiendo. Dispara con .on (boot-on-scroll). */
+@keyframes lineDraw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.line-draw {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.line-draw.on {
+  animation: lineDraw 0.7s steps(14) forwards;
+}
+
 /* Entrada escalonada (fade + rise) */
 @keyframes riseIn {
   from {
@@ -250,6 +275,11 @@ body {
     opacity: 1;
     animation: none;
     clip-path: none;
+  }
+  .line-draw,
+  .line-draw.on {
+    transform: none;
+    animation: none;
   }
   .cursor-blink {
     opacity: 1;
