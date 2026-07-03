@@ -25,16 +25,30 @@ const EVENT = {
 };
 
 /* Sponsors. Logos en blanco (public/sponsors). Wallbit: logo pendiente -> nombre. */
-type Sponsor = { name: string; role?: string; logo?: string };
+/* logoClass: ajuste óptico por logo — mismo peso visual, no mismo bounding box */
+type Sponsor = { name: string; role?: string; logo?: string; logoClass?: string };
 const SPONSORS: Sponsor[] = [
-  { name: "Córdoba Cluster", logo: "/sponsors/cordoba-cluster.png" },
+  {
+    name: "Córdoba Cluster",
+    logo: "/sponsors/cordoba-cluster.png",
+    logoClass: "max-h-12 sm:max-h-14",
+  },
   { name: "Cursor", logo: "/sponsors/cursor.svg" },
   { name: "Supabase", logo: "/sponsors/supabase.svg" },
-  { name: "Naranja X", role: "Anfitrión", logo: "/sponsors/naranja-x.webp" },
+  {
+    name: "Naranja X",
+    role: "Anfitrión",
+    logo: "/sponsors/naranja-x.webp",
+    logoClass: "max-h-8 sm:max-h-9",
+  },
   { name: "BTC Argentina", logo: "/sponsors/btc-argentina.png" },
   { name: "Hedera", logo: "/sponsors/hedera.svg" },
   { name: "Wallbit", logo: "/sponsors/Wallbit-logo.png" },
-  { name: "Paisanos", logo: "/sponsors/paisanos.png" },
+  {
+    name: "Paisanos",
+    logo: "/sponsors/paisanos.png",
+    logoClass: "max-h-7 sm:max-h-8",
+  },
 ];
 
 /* Cronograma (horarios tentativos). Fases del deck, agrupadas por día. */
@@ -136,7 +150,7 @@ function Unit({ value, label }: { value: number; label: string }) {
       <span className="font-display text-2xl font-bold leading-none tabular-nums text-paper sm:text-4xl">
         {pad(value)}
       </span>
-      <span className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+      <span className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
         {label}
       </span>
     </div>
@@ -289,7 +303,7 @@ function Stat({
         {display}
         {unit ? <span className="ml-0.5 text-lg text-muted sm:text-2xl">{unit}</span> : null}
       </div>
-      <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+      <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
         {label}
       </div>
     </div>
@@ -309,15 +323,15 @@ function Track({
   tags: string[];
 }) {
   return (
-    <div className="group relative flex flex-col border border-white/10 bg-white/[0.02] p-6 transition-colors hover:bg-white/[0.04] sm:p-7">
+    <div className="group relative flex flex-col border border-white/10 bg-white/[0.02] p-6 hover:border-white/40 hover:bg-white/[0.04] sm:p-7">
       <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
         {id}
       </span>
       <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-paper">
         {title}
       </h3>
-      <p className="mt-2 font-mono text-xs leading-relaxed text-muted">{desc}</p>
-      <ul className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-5">
+      <p className="mt-2 font-mono text-[13px] leading-relaxed text-paper/70">{desc}</p>
+      <ul className="mt-5 flex flex-row flex-wrap gap-x-4 gap-y-2 border-t border-white/10 pt-5 sm:flex-col sm:gap-2">
         {tags.map((tag) => (
           <li
             key={tag}
@@ -338,20 +352,22 @@ function SponsorSlot({
   name,
   role,
   logo,
+  logoClass,
 }: {
   name: string;
   role?: string;
   logo?: string;
+  logoClass?: string;
 }) {
   return (
-    <div className="group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
+    <div className="group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 hover:border-white/40 hover:bg-white/[0.04]">
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={logo}
           alt={name}
           loading="lazy"
-          className="max-h-10 w-auto max-w-[82%] object-contain opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:max-h-12"
+          className={`${logoClass ?? "max-h-10 sm:max-h-12"} w-auto max-w-[82%] object-contain opacity-90 group-hover:opacity-100`}
         />
       ) : (
         <span className="font-display text-lg font-bold tracking-tight text-paper/75 sm:text-2xl">
@@ -359,7 +375,7 @@ function SponsorSlot({
         </span>
       )}
       {role ? (
-        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
           {role}
         </span>
       ) : null}
@@ -401,10 +417,9 @@ function Countdown({ booted }: { booted: boolean }) {
 
   return (
     <div
-      className={`relative mt-10 inline-flex items-center gap-3 border border-white/10 bg-white/[0.04] px-7 py-5 backdrop-blur-md sm:gap-5 sm:px-9 ${
+      className={`relative mt-10 inline-flex items-center gap-3 border border-white/10 bg-[#0a0a0a] px-7 py-5 sm:gap-5 sm:px-9 ${
         booted ? "rise-in [animation-delay:0.26s]" : "opacity-0"
       }`}
-      style={{ boxShadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.07)" }}
     >
       <Unit value={v.d} label="Días" />
       <Sep />
@@ -471,8 +486,11 @@ export default function HeroV2() {
               booted ? "rise-in [animation-delay:0.2s]" : "opacity-0"
             }`}
           >
-            <span style={{ color: "rgb(var(--accent))" }}>&gt;</span> 24 hs ·
-            100 hackers · Casa Naranja X, Córdoba
+            <span style={{ color: "rgb(var(--accent))" }}>&gt;</span>{" "}
+            <span className="sm:hidden">24 hs · 100 hackers · Córdoba</span>
+            <span className="hidden sm:inline">
+              24 hs · 100 hackers · Casa Naranja X, Córdoba
+            </span>
             <span className="cursor-blink ml-1 inline-block h-[1em] w-[0.5em] translate-y-[0.1em] bg-[rgb(var(--accent))] align-middle" />
           </p>
 
@@ -508,7 +526,7 @@ export default function HeroV2() {
                 <br />
                 Hacé que funcione.
               </h2>
-              <p className="mt-6 max-w-xl font-mono text-sm leading-relaxed text-muted sm:text-[15px]">
+              <p className="mt-6 max-w-xl font-mono text-[15px] leading-relaxed text-paper/85">
                 Venís con una idea, te vas con un producto. 24 horas
                 construyendo con 100 hackers, mentores en cada etapa, y el
                 domingo tu demo corriendo frente al jurado. Lo que hagas es
@@ -538,7 +556,7 @@ export default function HeroV2() {
             <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
               Elegí tu track.
             </h2>
-            <p className="max-w-sm font-mono text-sm leading-relaxed text-muted">
+            <p className="max-w-sm font-mono text-[15px] leading-relaxed text-paper/80">
               Tres verticales con desafíos concretos que se presentan en la
               apertura. Elegí la tuya y construí sobre eso todo el finde.
             </p>
@@ -563,14 +581,14 @@ export default function HeroV2() {
         id="cronograma"
         className="relative border-t border-white/10 px-5 py-20 sm:px-8 sm:py-28"
       >
-        <div className="mx-auto w-full max-w-3xl">
+        <div className="mx-auto w-full max-w-5xl">
           <SectionLabel index="03" label="Cronograma" />
 
-          <Reveal className="mt-10 flex items-end justify-between gap-6">
+          <Reveal className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
               24 horas, sin pausa.
             </h2>
-            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+            <span className="order-first shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-muted sm:order-none">
               Horarios tentativos
             </span>
           </Reveal>
@@ -581,7 +599,7 @@ export default function HeroV2() {
             className="relative mt-10 flex flex-col gap-4 border border-white/10 bg-white/[0.02] px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
                 Fecha
               </span>
               <span className="font-display text-lg font-bold tracking-tight text-paper">
@@ -589,7 +607,7 @@ export default function HeroV2() {
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
                 Sede
               </span>
               <span className="font-display text-lg font-bold tracking-tight text-paper">
@@ -652,14 +670,20 @@ export default function HeroV2() {
           <SectionLabel index="04" label="Sponsors" />
 
           <Reveal className="mt-10">
-            <p className="font-mono text-sm leading-relaxed text-muted">
+            <p className="font-mono text-[15px] leading-relaxed text-paper/80">
               Hackcba pasa gracias a estas empresas.
             </p>
           </Reveal>
 
           <Reveal delay={0.1} className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {SPONSORS.map((s) => (
-              <SponsorSlot key={s.name} name={s.name} role={s.role} logo={s.logo} />
+              <SponsorSlot
+                key={s.name}
+                name={s.name}
+                role={s.role}
+                logo={s.logo}
+                logoClass={s.logoClass}
+              />
             ))}
           </Reveal>
 
@@ -681,7 +705,7 @@ export default function HeroV2() {
       {/* ===================== REGISTRO (cierre) ===================== */}
       <section
         id="registro"
-        className="relative border-t border-white/10 px-5 py-24 text-center sm:px-8 sm:py-32"
+        className="relative border-t border-white/10 px-5 pb-24 pt-40 text-center sm:px-8 sm:pb-32 sm:pt-56"
       >
         <Reveal className="mx-auto flex max-w-2xl flex-col items-center">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">
@@ -692,7 +716,7 @@ export default function HeroV2() {
             <br />
             el 18.
           </h2>
-          <p className="mt-6 font-mono text-sm leading-relaxed text-muted">
+          <p className="mt-6 font-mono text-[15px] leading-relaxed text-paper/80">
             100 lugares. 24 horas. Una demo.
           </p>
           <a
