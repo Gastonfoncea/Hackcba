@@ -211,8 +211,9 @@ function Reveal({
   );
 }
 
-/* Encabezado de sección, estilo terminal: // 01 · LABEL ─────────
-   Al entrar en viewport, el label se tipea y la línea se dibuja en pasos. */
+/* Encabezado de sección, estilo log de sistema: [01] LABEL ─────────
+   (rima con el [+]/[*] del fondo del hero). Al entrar en viewport,
+   el label se tipea y la línea se dibuja en pasos. */
 function SectionLabel({ index, label }: { index: string; label: string }) {
   const { ref, inView } = useInView<HTMLDivElement>();
   const [chars, setChars] = useState(0);
@@ -246,7 +247,7 @@ function SectionLabel({ index, label }: { index: string; label: string }) {
       className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted"
     >
       <span className={`text-paper ${inView ? "" : "opacity-0"}`}>
-        // {index}
+        [{index}]
       </span>
       <span className="whitespace-pre">
         {label.slice(0, chars)}
