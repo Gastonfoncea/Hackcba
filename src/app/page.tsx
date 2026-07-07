@@ -26,28 +26,50 @@ const EVENT = {
 
 /* Sponsors. Logos en blanco (public/sponsors). Wallbit: logo pendiente -> nombre. */
 /* logoClass: ajuste óptico por logo — mismo peso visual, no mismo bounding box */
-type Sponsor = { name: string; role?: string; logo?: string; logoClass?: string };
+type Sponsor = {
+  name: string;
+  role?: string;
+  logo?: string;
+  logoClass?: string;
+  url?: string;
+};
 const SPONSORS: Sponsor[] = [
-  {
-    name: "Córdoba Cluster",
-    logo: "/sponsors/cordoba-cluster.png",
-    logoClass: "max-h-12 sm:max-h-14",
-  },
-  { name: "Cursor", logo: "/sponsors/cursor.svg" },
-  { name: "Supabase", logo: "/sponsors/supabase.svg" },
   {
     name: "Naranja X",
     role: "Anfitrión",
     logo: "/sponsors/naranja-x.webp",
     logoClass: "max-h-8 sm:max-h-9",
+    url: "https://www.naranjax.com",
   },
-  { name: "BTC Argentina", logo: "/sponsors/btc-argentina.png" },
-  { name: "Hedera", logo: "/sponsors/hedera.svg" },
-  { name: "Wallbit", logo: "/sponsors/Wallbit-logo.png" },
+  {
+    name: "Córdoba Cluster",
+    logo: "/sponsors/cordoba-cluster.png",
+    logoClass: "max-h-12 sm:max-h-14",
+    url: "https://cordobacluster.com",
+  },
+  { name: "Cursor", logo: "/sponsors/cursor.svg", url: "https://cursor.com" },
+  {
+    name: "Supabase",
+    logo: "/sponsors/supabase.svg",
+    url: "https://supabase.com",
+  },
+  {
+    name: "BTC Argentina",
+    logo: "/sponsors/btc.png",
+    logoClass: "max-h-12 sm:max-h-14",
+    url: "https://bitcoin.ar",
+  },
+  { name: "Hedera", logo: "/sponsors/hedera.svg", url: "https://hedera.com" },
+  {
+    name: "Wallbit",
+    logo: "/sponsors/Wallbit-logo.png",
+    url: "https://wallbit.io",
+  },
   {
     name: "Paisanos",
     logo: "/sponsors/paisanos.png",
     logoClass: "max-h-7 sm:max-h-8",
+    url: "https://paisanos.io",
   },
 ];
 
@@ -150,7 +172,7 @@ function Unit({ value, label }: { value: number; label: string }) {
       <span className="font-display text-2xl font-bold leading-none tabular-nums text-paper sm:text-4xl">
         {pad(value)}
       </span>
-      <span className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+      <span className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
         {label}
       </span>
     </div>
@@ -244,7 +266,7 @@ function SectionLabel({ index, label }: { index: string; label: string }) {
   return (
     <div
       ref={ref}
-      className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted"
+      className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.12em] text-muted"
     >
       <span className={`text-paper ${inView ? "" : "opacity-0"}`}>
         [{index}]
@@ -304,7 +326,7 @@ function Stat({
         {display}
         {unit ? <span className="ml-0.5 text-lg text-muted sm:text-2xl">{unit}</span> : null}
       </div>
-      <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+      <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
         {label}
       </div>
     </div>
@@ -325,7 +347,7 @@ function Track({
 }) {
   return (
     <div className="group relative flex flex-col border border-white/10 bg-white/[0.02] p-6 hover:border-white/40 hover:bg-white/[0.04] sm:p-7">
-      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+      <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
         {id}
       </span>
       <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-paper">
@@ -354,14 +376,18 @@ function SponsorSlot({
   role,
   logo,
   logoClass,
+  url,
 }: {
   name: string;
   role?: string;
   logo?: string;
   logoClass?: string;
+  url?: string;
 }) {
-  return (
-    <div className="group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 hover:border-white/40 hover:bg-white/[0.04]">
+  const cls =
+    "group relative flex aspect-[5/2] flex-col items-center justify-center gap-1.5 border border-white/10 bg-white/[0.02] p-4 hover:border-white/40 hover:bg-white/[0.04]";
+  const inner = (
+    <>
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -376,11 +402,24 @@ function SponsorSlot({
         </span>
       )}
       {role ? (
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
           {role}
         </span>
       ) : null}
-    </div>
+    </>
+  );
+  return url ? (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${name} — sitio oficial`}
+      className={cls}
+    >
+      {inner}
+    </a>
+  ) : (
+    <div className={cls}>{inner}</div>
   );
 }
 
@@ -451,7 +490,7 @@ export default function HeroV2() {
 
         {/* NAV mínimo */}
         <header
-          className={`relative z-10 flex items-center justify-between px-5 py-5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted sm:px-8 ${
+          className={`relative z-10 flex items-center justify-between px-5 py-5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted sm:px-8 ${
             booted ? "rise-in" : "opacity-0"
           }`}
         >
@@ -464,7 +503,7 @@ export default function HeroV2() {
         <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-5 py-10 text-center">
           {/* solo la fecha arriba del título */}
           <span
-            className={`mb-7 font-mono text-[10px] uppercase tracking-[0.28em] text-muted ${
+            className={`mb-7 font-mono text-[10px] uppercase tracking-[0.15em] text-muted ${
               booted ? "rise-in [animation-delay:0.12s]" : "opacity-0"
             }`}
           >
@@ -589,7 +628,7 @@ export default function HeroV2() {
             <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl">
               24 horas, sin pausa.
             </h2>
-            <span className="order-first shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-muted sm:order-none">
+            <span className="order-first shrink-0 font-mono text-[10px] uppercase tracking-[0.1em] text-muted sm:order-none">
               Horarios tentativos
             </span>
           </Reveal>
@@ -600,7 +639,7 @@ export default function HeroV2() {
             className="relative mt-10 flex flex-col gap-4 border border-white/10 bg-white/[0.02] px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
                 Fecha
               </span>
               <span className="font-display text-lg font-bold tracking-tight text-paper">
@@ -608,7 +647,7 @@ export default function HeroV2() {
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
                 Sede
               </span>
               <span className="font-display text-lg font-bold tracking-tight text-paper">
@@ -629,7 +668,7 @@ export default function HeroV2() {
           <Reveal delay={0.16}>
           {SCHEDULE.map((d) => (
             <div key={d.day} className="mt-12">
-              <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.25em]">
+              <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.12em]">
                 <span className="text-paper">{d.day}</span>
                 <span className="text-muted">{d.date}</span>
                 <span className="h-px flex-1 bg-white/10" />
@@ -644,7 +683,7 @@ export default function HeroV2() {
                       aria-hidden
                       className="absolute left-0 top-1.5 h-2 w-2 -translate-x-1/2 bg-paper"
                     />
-                    <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted">
                       {s.time}
                     </div>
                     <h3 className="mt-1 font-display text-lg font-bold tracking-tight text-paper sm:text-xl">
@@ -684,6 +723,7 @@ export default function HeroV2() {
                 role={s.role}
                 logo={s.logo}
                 logoClass={s.logoClass}
+                url={s.url}
               />
             ))}
           </Reveal>
@@ -692,7 +732,7 @@ export default function HeroV2() {
           <Reveal delay={0.18}>
             <a
               href="#registro"
-              className="group mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-muted transition-colors hover:text-paper"
+              className="group mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted transition-colors hover:text-paper"
             >
               ¿Querés que tu empresa esté acá?
               <span className="text-paper/70 transition-transform group-hover:translate-x-1">
@@ -709,7 +749,7 @@ export default function HeroV2() {
         className="relative border-t border-white/10 px-5 pb-24 pt-40 text-center sm:px-8 sm:pb-32 sm:pt-56"
       >
         <Reveal className="mx-auto flex max-w-2xl flex-col items-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
             {EVENT.dates} · Casa Naranja X
           </span>
           <h2 className="mt-6 font-display text-4xl font-bold leading-[0.95] tracking-[-0.03em] text-paper sm:text-6xl">
@@ -727,14 +767,14 @@ export default function HeroV2() {
             Inscribite
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
             Inscripción abierta · cupos limitados
           </p>
         </Reveal>
       </section>
 
       {/* ===================== FOOTER ===================== */}
-      <footer className="flex flex-col items-start justify-between gap-2 border-t border-white/10 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted sm:flex-row sm:items-center sm:px-8">
+      <footer className="flex flex-col items-start justify-between gap-2 border-t border-white/10 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.1em] text-muted sm:flex-row sm:items-center sm:px-8">
         <span className="text-paper">
           Hackcba<span className="text-muted">/26</span> — hecho en Córdoba
         </span>
